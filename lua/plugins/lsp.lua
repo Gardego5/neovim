@@ -120,7 +120,7 @@ return { -- LSP Plugins
 
                     -- Rename the variable under your cursor.
                     --  Most Language Servers support renaming across files, etc.
-                    map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+                    map("<leader>cr", vim.lsp.buf.rename, "[C]ode [R]ename")
 
                     -- Execute a code action, usually your cursor needs to be on top of an error
                     -- or a suggestion from your LSP for this to activate.
@@ -209,20 +209,30 @@ return { -- LSP Plugins
                         [vim.diagnostic.severity.HINT] = "󰌶 ",
                     },
                 } or {},
-                virtual_text = {
-                    source = "if_many",
-                    spacing = 2,
-                    format = function(diagnostic)
-                        local diagnostic_message = {
-                            [vim.diagnostic.severity.ERROR] = diagnostic.message,
-                            [vim.diagnostic.severity.WARN] = diagnostic.message,
-                            [vim.diagnostic.severity.INFO] = diagnostic.message,
-                            [vim.diagnostic.severity.HINT] = diagnostic.message,
-                        }
-                        return diagnostic_message[diagnostic.severity]
-                    end,
-                },
+                virtual_lines = true,
+                virtual_text = false,
             })
+
+            vim.keymap.set("n", "gK", function()
+                local virtual_lines = vim.diagnostic.config().virtual_lines
+
+                vim.diagnostic.config({
+                    virtual_lines = not virtual_lines,
+                    virtual_text = virtual_lines and false or {
+                        source = "if_many",
+                        spacing = 2,
+                        format = function(diagnostic)
+                            local diagnostic_message = {
+                                [vim.diagnostic.severity.ERROR] = diagnostic.message,
+                                [vim.diagnostic.severity.WARN] = diagnostic.message,
+                                [vim.diagnostic.severity.INFO] = diagnostic.message,
+                                [vim.diagnostic.severity.HINT] = diagnostic.message,
+                            }
+                            return diagnostic_message[diagnostic.severity]
+                        end,
+                    },
+                })
+            end, { desc = "Toggle diagnostic virtural lines/text" })
 
             -- LSP servers and clients are able to communicate to each other what features they support.
             --  By default, Neovim doesn't support everything that is in the LSP specification.
@@ -263,7 +273,8 @@ return { -- LSP Plugins
                         singleFileSupport = true,
                     },
                 },
-                nil_ls = {},
+                -- nil_ls = {},
+                jdtls = {},
                 tailwindcss = {},
                 terraformls = {},
                 snyk_ls = {

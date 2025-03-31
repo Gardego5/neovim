@@ -41,7 +41,7 @@ vim.opt.scrolloff = 2
 vim.opt.confirm = true
 
 -- colorscheme
-vim.cmd("colorscheme wildcharm")
+-- vim.cmd("colorscheme wildcharm")
 
 --== Keymaps ==--
 
@@ -63,11 +63,6 @@ vim.keymap.set("n", "<left>", '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set("n", "<right>", '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set("n", "<up>", '<cmd>echo "Use k to move!!"<CR>')
 vim.keymap.set("n", "<down>", '<cmd>echo "Use j to move!!"<CR>')
-
-vim.keymap.set("n", "gK", function()
-    local new_config = not vim.diagnostic.config().virtual_lines
-    vim.diagnostic.config({ virtual_lines = new_config })
-end, { desc = "Toggle diagnostic virtual_lines" })
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
