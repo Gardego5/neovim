@@ -32,7 +32,13 @@ return {
         },
         dependencies = {
             "MunifTanjim/nui.nvim",
-            "rcarriga/nvim-notify",
+            {
+                "rcarriga/nvim-notify",
+                opts = {
+                    render = "compact",
+                    top_down = false,
+                },
+            },
         },
     },
     { -- colorize text like "#445577" in css and stuff
